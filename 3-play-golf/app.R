@@ -6,14 +6,21 @@
 
 
 # Import libraries
+library(tidyverse)
 library(shiny)
 library(shinythemes)
 library(data.table)
-library(RCurl)
+library(RCurl) 
 library(randomForest)
 
 # Read data
-weather <- read.csv(text = getURL("https://raw.githubusercontent.com/dataprofessor/data/master/weather-weka.csv") )
+weather <- read_delim('golf.txt') %>% 
+  # mutate(play = ifelse(play == 'no', 0, 1))
+  mutate(play = as.factor(play),
+         outlook = as.factor(outlook),
+         temperature = as.integer(temperature),
+         humidity = as.integer(humidity))
+# weather <- read_delim('3-play-golf/golf.txt')
 
 # Build model
 model <- randomForest(play ~ ., data = weather, ntree = 500, mtry = 4, importance = TRUE)
@@ -92,7 +99,7 @@ server <- function(input, output, session) {
   test$outlook <- factor(test$outlook, levels = c("overcast", "rainy", "sunny"))
   
   
-  Output <- data.frame(Prediction=predict(model,test), round(predict(model,test,type="prob"), 3))
+  Output <- data.frame(Prediction=predict(model,te  st), round(predict(model,test,type="prob"), 3))
   print(Output)
   
   })
