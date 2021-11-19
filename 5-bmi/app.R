@@ -39,7 +39,8 @@ ui <- fluidPage(theme = shinytheme("united"),
                                     mainPanel(
                                       tags$label(h3('Status/Output')), # Status/Output Text Box
                                       verbatimTextOutput('contents'),
-                                      tableOutput('tabledata') # Results table
+                                      tableOutput('tabledata'), # Results table
+                                      tableOutput('tabledata2') # Results table
                                     ) # mainPanel()
                                     
                            ), #tabPanel(), Home
@@ -81,8 +82,12 @@ server <- function(input, output, session) {
   # Prediction results table
   output$tabledata <- renderTable({
     if (input$submitbutton>0) { 
-      isolate(datasetInput()) 
+      datasetInput()
     } 
+  })
+  
+  output$tabledata2 <- renderTable({
+    data.frame(1)
   })
   
 }
@@ -91,4 +96,4 @@ server <- function(input, output, session) {
 ####################################
 # Create Shiny App                 #
 ####################################
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server) 
